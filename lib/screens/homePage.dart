@@ -1,12 +1,29 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:to_do_list/auth/objects.dart';
 
-class Homepage extends StatelessWidget {
+class Homepage extends StatefulWidget {
   const Homepage({super.key});
 
   @override
+  State<Homepage> createState() => _HomepageState();
+}
+
+class _HomepageState extends State<Homepage> {
+  String selectedTag = 'All';
+
+  List<String> allTags = ['All', 'study', 'work', 'personal', 'test'];
+
+  final List<Map<String, dynamic>> tasks = [
+    {'title': 'Learn Flutter', 'isDone': false, 'tag': 'study'},
+    {'title': 'Build UI', 'isDone': true, 'tag': 'work'},
+    {'title': 'Read book', 'isDone': false, 'tag': 'personal'},
+  ];
+
+  @override
   Widget build(BuildContext context) {
-    bool isselected = true;
+    // final filteredTasks = tasks
+    //     .where((task) => task['tag'] == selectedTag)
+    //     .toList();
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 16),
@@ -38,6 +55,25 @@ class Homepage extends StatelessWidget {
               ],
             ),
             SizedBox(height: 20),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: allTags.map((tag) {
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: TagChip(
+                      tagName: tag,
+                      isSelected: selectedTag == tag,
+                      onTap: () {
+                        setState(() {
+                          selectedTag = tag;
+                        });
+                      },
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
           ],
         ),
       ),
@@ -45,94 +81,37 @@ class Homepage extends StatelessWidget {
   }
 }
 
-class CusAppbar extends StatelessWidget {
-  const CusAppbar({super.key, required this.title});
+class TagChip extends StatelessWidget {
+  final String tagName;
+  final bool isSelected;
+  final VoidCallback onTap;
 
-  final String title;
+  const TagChip({
+    super.key,
+    required this.tagName,
+    required this.isSelected,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 100,
-      padding: const EdgeInsets.all(16),
-      // decoration: BoxDecoration(
-      //   borderRadius: BorderRadius.circular(20),
-      //   border: Border.all(color: Colors.white, width: sqrt1_2),
-      // ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-              image: const DecorationImage(
-                image: AssetImage('assets/pfp.jpg'),
-                fit: BoxFit.cover,
-              ),
-            ),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+        decoration: BoxDecoration(
+          border: Border.all(color: const Color(0xFF94A3B8), width: 2),
+          borderRadius: BorderRadius.circular(10),
+          color: isSelected ? const Color(0xFF94A3B8) : Colors.transparent,
+        ),
+        child: Text(
+          '#$tagName',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: isSelected
+                ? const Color(0xff222222)
+                : const Color(0xFF94A3B8),
           ),
-          const SizedBox(width: 16),
-          Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                RichText(
-                  text: TextSpan(
-                    children: [
-                      const TextSpan(
-                        text: "Hey, ",
-                        style: TextStyle(
-                          color: Color(0xFF94A3B8),
-                          fontSize: 18,
-                        ),
-                      ),
-                      TextSpan(
-                        text: title,
-                        style: const TextStyle(
-                          color: Color(0xFFE5E7EB),
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Text('Keep Track of You Daily Tasks'),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class tasks extends StatelessWidget {
-  bool isselected = true;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-      decoration: BoxDecoration(
-        border: Border.all(color: Color(0xFF94A3B8), width: 3),
-        borderRadius: BorderRadius.circular(10),
-        color: isselected ? Color(0xFF94A3B8) : Colors.transparent,
-      ),
-      child: Text(
-        '#All',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: isselected ? Color(0xff222222) : Color(0xFF94A3B8),
         ),
       ),
     );
