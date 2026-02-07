@@ -8,7 +8,7 @@ class Homepage extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          CusAppbar(title: Text('Uzair Arain')),
+          CusAppbar(title: 'Uzair Arain'),
           Expanded(
             child: const Center(
               child: Text(
@@ -26,7 +26,7 @@ class Homepage extends StatelessWidget {
 class CusAppbar extends StatelessWidget {
   CusAppbar({super.key, required this.title});
 
-  final title;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
