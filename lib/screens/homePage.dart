@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 class Homepage extends StatelessWidget {
@@ -12,8 +11,31 @@ class Homepage extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 16),
         child: Column(
           children: [
-            const CusAppbar(title: 'Uzair Arain'),
-            const SizedBox(height: 20),
+            CusAppbar(title: 'Uzair Arain'),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Your Tasks',
+                  style: TextStyle(fontFamily: 'ArchivoBlack', fontSize: 30),
+                ),
+                Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Color(0xFF94A3B8), width: 2),
+                    color: Color(0xFF94A3B8),
+                  ),
+                  child: IconButton(
+                    onPressed: () {},
+                    iconSize: 30,
+                    icon: Icon(Icons.add, color: Color(0xFF222222)),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),

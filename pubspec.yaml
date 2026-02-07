@@ -37,6 +37,7 @@ dependencies:
   hive_flutter: ^1.1.0
   hive_generator: ^2.0.1
   build_runner: ^2.4.13
+  google_fonts: ^8.0.1
 
 dev_dependencies:
   flutter_test:
@@ -78,6 +79,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
+  fonts:
+    - family: ArchivoBlack
+      fonts:
+        - asset: assets/fonts/ArchivoBlack-Regular.ttf
   # fonts:
   #   - family: Schyler
   #     fonts:

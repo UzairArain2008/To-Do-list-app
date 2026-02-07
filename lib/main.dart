@@ -24,7 +24,10 @@ class MyApp extends StatelessWidget {
         ),
         textTheme: const TextTheme(
           bodyLarge: TextStyle(color: Color(0xFFE5E7EB), fontSize: 16),
-          bodyMedium: TextStyle(color: Color(0xFF94A3B8)),
+          bodyMedium: TextStyle(
+            color: Color(0xFF94A3B8),
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
       home: Homepage(),
