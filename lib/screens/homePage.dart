@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class Homepage extends StatelessWidget {
@@ -6,55 +8,82 @@ class Homepage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          CusAppbar(title: 'Uzair Arain'),
-          Expanded(
-            child: const Center(
-              child: Text(
-                "Your tasks go here",
-                style: TextStyle(color: Color(0xFFE5E7EB)),
-              ),
-            ),
-          ),
-        ],
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 16),
+        child: Column(
+          children: [
+            const CusAppbar(title: 'Uzair Arain'),
+            const SizedBox(height: 20),
+          ],
+        ),
       ),
     );
   }
 }
 
 class CusAppbar extends StatelessWidget {
-  CusAppbar({super.key, required this.title});
+  const CusAppbar({super.key, required this.title});
 
   final String title;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 80,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      color: Colors.transparent,
+      height: 100,
+      padding: const EdgeInsets.all(16),
+      // decoration: BoxDecoration(
+      //   borderRadius: BorderRadius.circular(20),
+      //   border: Border.all(color: Colors.white, width: sqrt1_2),
+      // ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          RichText(
-            text: TextSpan(
+          Container(
+            width: 60,
+            height: 60,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(30),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+              image: const DecorationImage(
+                image: AssetImage('assets/pfp.jpg'),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          const SizedBox(width: 16),
+          Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextSpan(
-                  text: "Hello, ",
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 145, 144, 144),
-                    fontSize: 18,
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      const TextSpan(
+                        text: "Hey, ",
+                        style: TextStyle(
+                          color: Color(0xFF94A3B8),
+                          fontSize: 18,
+                        ),
+                      ),
+                      TextSpan(
+                        text: title,
+                        style: const TextStyle(
+                          color: Color(0xFFE5E7EB),
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                TextSpan(
-                  text: title,
-                  style: TextStyle(
-                    color: Color(0xFFffffff),
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                Text('Keep Track of You Daily Tasks'),
               ],
             ),
           ),
