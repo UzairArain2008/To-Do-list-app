@@ -6,6 +6,7 @@ class Homepage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isselected = true;
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 16),
@@ -36,6 +37,7 @@ class Homepage extends StatelessWidget {
                 ),
               ],
             ),
+            SizedBox(height: 20),
           ],
         ),
       ),
@@ -110,6 +112,28 @@ class CusAppbar extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class tasks extends StatelessWidget {
+  bool isselected = true;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+      decoration: BoxDecoration(
+        border: Border.all(color: Color(0xFF94A3B8), width: 3),
+        borderRadius: BorderRadius.circular(10),
+        color: isselected ? Color(0xFF94A3B8) : Colors.transparent,
+      ),
+      child: Text(
+        '#All',
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: isselected ? Color(0xff222222) : Color(0xFF94A3B8),
+        ),
       ),
     );
   }
