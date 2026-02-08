@@ -28,6 +28,11 @@ class MyApp extends StatelessWidget {
             color: Color(0xFF94A3B8),
             fontWeight: FontWeight.bold,
           ),
+          titleMedium: TextStyle(
+            color: Color(0xff222222),
+            fontWeight: FontWeight.w700,
+            fontSize: 22,
+          ),
         ),
       ),
       home: Homepage(),
