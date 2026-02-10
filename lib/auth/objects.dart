@@ -206,12 +206,12 @@ class TaskCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
 
-                const SizedBox(height: 4),
+                // const SizedBox(height: 4),
 
-                Text(
-                  timeLeft,
-                  style: const TextStyle(fontSize: 12, color: Colors.redAccent),
-                ),
+                // Text(
+                //   timeLeft,
+                //   style: const TextStyle(fontSize: 12, color: Colors.redAccent),
+                // ),
               ],
             ),
           ),
