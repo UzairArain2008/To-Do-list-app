@@ -108,3 +108,124 @@ class TagChip extends StatelessWidget {
     );
   }
 }
+
+class TaskCard extends StatelessWidget {
+  final String tag;
+  final String title;
+  final String description;
+  final String timeLeft;
+  final bool isDone;
+  final VoidCallback onToggleDone;
+
+  const TaskCard({
+    super.key,
+    required this.tag,
+    required this.title,
+    required this.description,
+    required this.timeLeft,
+    required this.isDone,
+    required this.onToggleDone,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(25),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GestureDetector(
+            onTap: onToggleDone,
+            child: Container(
+              width: 30,
+              height: 30,
+              decoration: BoxDecoration(
+                color: isDone ? const Color(0xff22c35d) : Colors.transparent,
+                border: Border.all(
+                  color: isDone
+                      ? const Color(0xff22c35d)
+                      : const Color(0xFF94A3B8).withOpacity(0.25),
+                  width: 2,
+                ),
+                borderRadius: BorderRadius.circular(100),
+              ),
+              child: isDone
+                  ? const Icon(Icons.check, size: 18, color: Colors.white)
+                  : null,
+            ),
+          ),
+
+          const SizedBox(width: 12),
+
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: const Color(0xff22c35d).withOpacity(0.25),
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  child: Text(
+                    tag,
+                    style: const TextStyle(
+                      color: Color(0xff22c35d),
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 6),
+
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: isDone ? const Color(0xFF94A3B8) : Colors.black,
+                    decoration: isDone
+                        ? TextDecoration.lineThrough
+                        : TextDecoration.none,
+                    decorationThickness: 2.5,
+                  ),
+                ),
+
+                Text(
+                  description,
+                  style: const TextStyle(fontSize: 13, color: Colors.black54),
+                  overflow: TextOverflow.ellipsis,
+                ),
+
+                const SizedBox(height: 4),
+
+                Text(
+                  timeLeft,
+                  style: const TextStyle(fontSize: 12, color: Colors.redAccent),
+                ),
+              ],
+            ),
+          ),
+
+          PopupMenuButton<String>(
+            onSelected: (value) {},
+            itemBuilder: (context) => const [
+              PopupMenuItem(value: 'edit', child: Text('Edit')),
+              PopupMenuItem(value: 'delete', child: Text('Delete')),
+            ],
+            icon: const Icon(Icons.more_vert, color: Color(0xFF94A3B8)),
+          ),
+        ],
+      ),
+    );
+  }
+}
