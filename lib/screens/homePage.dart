@@ -75,7 +75,7 @@ class _HomepageState extends State<Homepage> {
               ),
             ),
             SizedBox(height: 30),
-            Tasks(),
+            Tasks(isdone: false),
           ],
         ),
       ),
@@ -84,32 +84,42 @@ class _HomepageState extends State<Homepage> {
 }
 
 class Tasks extends StatelessWidget {
-  const Tasks({super.key});
+  Tasks({super.key, required this.isdone});
+
+  bool isdone;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        print('object');
-      },
+      onTap: () => print('object'),
       child: Container(
         width: double.infinity,
         height: 120,
-        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15),
         decoration: BoxDecoration(
           color: Colors.white,
           // border: Border.all(color: Color(0xffcccccc), width: 3),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             GestureDetector(
+              onTap: () {
+                isdone = true;
+              },
               child: Container(
-                width: 25,
-                height: 25,
+                width: 28,
+                height: 28,
                 decoration: BoxDecoration(
+                  color: isdone ? Color(0xff22C35D) : Colors.transparent,
                   borderRadius: BorderRadius.circular(100),
-                  border: Border.all(color: Color(0XFFcccccc), width: 3),
+                  border: Border.all(
+                    color: isdone
+                        ? Color.fromARGB(136, 204, 204, 204)
+                        : Colors.transparent,
+                    width: 3,
+                  ),
                 ),
               ),
             ),
