@@ -11,7 +11,7 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   String selectedTag = 'All';
 
-  final List<String> allTags = ['All', 'study', 'work', 'personal', 'test'];
+  final List<String> allTags = ['All', 'study', 'work', 'personal'];
 
   final List<Map<String, dynamic>> tasks = [
     {
@@ -35,10 +35,106 @@ class _HomepageState extends State<Homepage> {
       'timeLeft': '30 min',
       'isDone': false,
     },
+    {
+      'tag': 'personal',
+      'title': 'Read book',
+      'description': 'Clean Code chapter 1',
+      'timeLeft': '30 min',
+      'isDone': false,
+    },
   ];
+
+  void showAddTaskDialog() {
+    String title = '';
+    String description = '';
+    String tag = 'study'; // default
+    String timeLeft = '';
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Add New Task'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Task title
+                TextField(
+                  decoration: const InputDecoration(labelText: 'Title'),
+                  onChanged: (value) => title = value,
+                ),
+
+                // Task description
+                TextField(
+                  decoration: const InputDecoration(labelText: 'Description'),
+                  onChanged: (value) => description = value,
+                ),
+
+                // Task tag
+                DropdownButtonFormField<String>(
+                  value: tag,
+                  decoration: const InputDecoration(labelText: 'Tag'),
+                  items: allTags
+                      .map((t) => DropdownMenuItem(value: t, child: Text(t)))
+                      .toList(),
+                  onChanged: (value) {
+                    if (value != null) tag = value;
+                  },
+                ),
+
+                TextField(
+                  decoration: const InputDecoration(
+                    labelText: 'Time left (e.g. 2 hrs)',
+                  ),
+                  onChanged: (value) => timeLeft = value,
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // close dialog
+              },
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                if (title.isNotEmpty &&
+                    description.isNotEmpty &&
+                    timeLeft.isNotEmpty) {
+                  setState(() {
+                    tasks.add({
+                      'tag': tag,
+                      'title': title,
+                      'description': description,
+                      'timeLeft': timeLeft,
+                      'isDone': false,
+                    });
+                  });
+                  Navigator.of(context).pop(); // close dialog
+                }
+              },
+              child: const Text('Save Task'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    final filteredTasks = selectedTag == 'All'
+        ? tasks
+        : tasks
+              .where(
+                (task) =>
+                    task['tag'].toLowerCase() == selectedTag.toLowerCase(),
+              )
+              .toList();
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 16),
@@ -62,7 +158,7 @@ class _HomepageState extends State<Homepage> {
                     color: const Color(0xFF94A3B8),
                   ),
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed: showAddTaskDialog,
                     icon: const Icon(Icons.add, color: Color(0xFF222222)),
                   ),
                 ),
@@ -91,31 +187,34 @@ class _HomepageState extends State<Homepage> {
               ),
             ),
 
-            // const SizedBox(height: 30),
+            // const SizedBox(height: 10),
             Expanded(
-              child: ListView.builder(
-                itemCount: tasks.length,
-                itemBuilder: (context, index) {
-                  final task = tasks[index];
+              child: Container(
+                margin: EdgeInsets.all(10),
+                child: ListView.builder(
+                  itemCount: filteredTasks.length,
+                  itemBuilder: (context, index) {
+                    final task = filteredTasks[index];
 
-                  return TaskCard(
-                    tag: task['tag'],
-                    title: task['title'],
-                    description: task['description'],
-                    timeLeft: task['timeLeft'],
-                    isDone: task['isDone'],
-                    onToggleDone: () {
-                      setState(() {
-                        tasks[index]['isDone'] = !tasks[index]['isDone'];
-                      });
-                    },
-                    onDelete: () {
-                      setState(() {
-                        tasks.removeAt(index);
-                      });
-                    },
-                  );
-                },
+                    return TaskCard(
+                      tag: task['tag'],
+                      title: task['title'],
+                      description: task['description'],
+                      timeLeft: task['timeLeft'],
+                      isDone: task['isDone'],
+                      onToggleDone: () {
+                        setState(() {
+                          tasks[index]['isDone'] = !tasks[index]['isDone'];
+                        });
+                      },
+                      onDelete: () {
+                        setState(() {
+                          tasks.removeAt(index);
+                        });
+                      },
+                    );
+                  },
+                ),
               ),
             ),
           ],
