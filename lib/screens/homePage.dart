@@ -18,28 +18,28 @@ class _HomepageState extends State<Homepage> {
       'tag': 'study',
       'title': 'Learn Flutter',
       'description': 'State management basics',
-      'timeLeft': '2 hrs',
+      'dateTime': DateTime.now(),
       'isDone': false,
     },
     {
       'tag': 'work',
       'title': 'Build UI',
       'description': 'Homepage layout',
-      'timeLeft': '1 hr',
+      'dateTime': DateTime.now(),
       'isDone': true,
     },
     {
       'tag': 'personal',
       'title': 'Read book',
       'description': 'Clean Code chapter 1',
-      'timeLeft': '30 min',
+      'dateTime': DateTime(2026, 2, 15, 20, 30),
       'isDone': false,
     },
     {
       'tag': 'personal',
-      'title': 'Read book',
-      'description': 'Clean Code chapter 1',
-      'timeLeft': '30 min',
+      'title': 'Read book 2',
+      'description': 'Clean Code chapter 2',
+      'dateTime': DateTime(2026, 2, 16, 18, 30),
       'isDone': false,
     },
   ];
@@ -48,7 +48,6 @@ class _HomepageState extends State<Homepage> {
     String title = '';
     String description = '';
     String tag = 'study'; // default
-    String timeLeft = '';
 
     showDialog(
       context: context,
@@ -59,35 +58,24 @@ class _HomepageState extends State<Homepage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Task title
                 TextField(
                   decoration: const InputDecoration(labelText: 'Title'),
                   onChanged: (value) => title = value,
                 ),
-
-                // Task description
                 TextField(
                   decoration: const InputDecoration(labelText: 'Description'),
                   onChanged: (value) => description = value,
                 ),
-
-                // Task tag
                 DropdownButtonFormField<String>(
                   value: tag,
                   decoration: const InputDecoration(labelText: 'Tag'),
                   items: allTags
+                      .where((t) => t != 'All')
                       .map((t) => DropdownMenuItem(value: t, child: Text(t)))
                       .toList(),
                   onChanged: (value) {
                     if (value != null) tag = value;
                   },
-                ),
-
-                TextField(
-                  decoration: const InputDecoration(
-                    labelText: 'Time left (e.g. 2 hrs)',
-                  ),
-                  onChanged: (value) => timeLeft = value,
                 ),
               ],
             ),
@@ -101,19 +89,17 @@ class _HomepageState extends State<Homepage> {
             ),
             ElevatedButton(
               onPressed: () {
-                if (title.isNotEmpty &&
-                    description.isNotEmpty &&
-                    timeLeft.isNotEmpty) {
+                if (title.isNotEmpty && description.isNotEmpty) {
                   setState(() {
                     tasks.add({
                       'tag': tag,
                       'title': title,
                       'description': description,
-                      'timeLeft': timeLeft,
+                      'dateTime': DateTime.now(), // assign current date
                       'isDone': false,
                     });
                   });
-                  Navigator.of(context).pop(); // close dialog
+                  Navigator.of(context).pop();
                 }
               },
               child: const Text('Save Task'),
@@ -124,25 +110,42 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
+  List<Map<String, dynamic>> getFilteredTasks() {
+    final now = DateTime.now();
+
+    return tasks.where((task) {
+      final date = task['dateTime'];
+      final tag = task['tag'];
+
+      if (date == null || date is! DateTime) return false;
+
+      final isToday =
+          date.year == now.year &&
+          date.month == now.month &&
+          date.day == now.day;
+
+      final matchesTag = selectedTag == 'All' || tag == selectedTag;
+
+      return isToday && matchesTag;
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final filteredTasks = selectedTag == 'All'
-        ? tasks
-        : tasks
-              .where(
-                (task) =>
-                    task['tag'].toLowerCase() == selectedTag.toLowerCase(),
-              )
-              .toList();
+    final filteredTasks = getFilteredTasks();
 
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 16),
+        padding: const EdgeInsets.only(
+          top: 40,
+          bottom: 20,
+          left: 16,
+          right: 16,
+        ),
         child: Column(
           children: [
             CusAppbar(title: 'Uzair Arain'),
             const SizedBox(height: 20),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -164,9 +167,7 @@ class _HomepageState extends State<Homepage> {
                 ),
               ],
             ),
-
             const SizedBox(height: 20),
-
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
@@ -186,35 +187,31 @@ class _HomepageState extends State<Homepage> {
                 }).toList(),
               ),
             ),
-
-            // const SizedBox(height: 10),
+            const SizedBox(height: 10),
             Expanded(
-              child: Container(
-                margin: EdgeInsets.all(10),
-                child: ListView.builder(
-                  itemCount: filteredTasks.length,
-                  itemBuilder: (context, index) {
-                    final task = filteredTasks[index];
+              child: ListView.builder(
+                itemCount: filteredTasks.length,
+                itemBuilder: (context, index) {
+                  final task = filteredTasks[index];
 
-                    return TaskCard(
-                      tag: task['tag'],
-                      title: task['title'],
-                      description: task['description'],
-                      timeLeft: task['timeLeft'],
-                      isDone: task['isDone'],
-                      onToggleDone: () {
-                        setState(() {
-                          tasks[index]['isDone'] = !tasks[index]['isDone'];
-                        });
-                      },
-                      onDelete: () {
-                        setState(() {
-                          tasks.removeAt(index);
-                        });
-                      },
-                    );
-                  },
-                ),
+                  return TaskCard(
+                    tag: task['tag'],
+                    title: task['title'],
+                    description: task['description'],
+                    dateTime: task['dateTime'],
+                    isDone: task['isDone'],
+                    onToggleDone: () {
+                      setState(() {
+                        task['isDone'] = !task['isDone'];
+                      });
+                    },
+                    onDelete: () {
+                      setState(() {
+                        tasks.remove(task);
+                      });
+                    },
+                  );
+                },
               ),
             ),
           ],

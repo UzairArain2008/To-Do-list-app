@@ -113,7 +113,7 @@ class TaskCard extends StatelessWidget {
   final String tag;
   final String title;
   final String description;
-  final String timeLeft;
+  final DateTime dateTime;
   final bool isDone;
   final VoidCallback onToggleDone;
   final VoidCallback onDelete;
@@ -124,7 +124,7 @@ class TaskCard extends StatelessWidget {
     required this.tag,
     required this.title,
     required this.description,
-    required this.timeLeft,
+    required this.dateTime,
     required this.isDone,
     required this.onToggleDone,
   });
