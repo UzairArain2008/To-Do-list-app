@@ -109,6 +109,11 @@ class _HomepageState extends State<Homepage> {
                         tasks[index]['isDone'] = !tasks[index]['isDone'];
                       });
                     },
+                    onDelete: () {
+                      setState(() {
+                        tasks.removeAt(index);
+                      });
+                    },
                   );
                 },
               ),

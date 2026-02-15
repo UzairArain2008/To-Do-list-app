@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
 
 class CusAppbar extends StatelessWidget {
   const CusAppbar({super.key, required this.title});
@@ -117,9 +116,11 @@ class TaskCard extends StatelessWidget {
   final String timeLeft;
   final bool isDone;
   final VoidCallback onToggleDone;
+  final VoidCallback onDelete;
 
   const TaskCard({
     super.key,
+    required this.onDelete,
     required this.tag,
     required this.title,
     required this.description,
@@ -218,71 +219,18 @@ class TaskCard extends StatelessWidget {
             ),
           ),
 
-          GestureDetector(
-            onTap: () {
-              AwesomeDialog(
-                context: context,
-                dialogType: DialogType.noHeader,
-                animType: AnimType.scale,
-                barrierColor: Colors.black.withOpacity(0.4),
-                dialogBackgroundColor: Colors.white,
-                body: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 10,
-                  ),
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 10),
-
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.black,
-                            padding: const EdgeInsets.symmetric(vertical: 14),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            elevation: 0,
-                          ),
-                          onPressed: () {},
-                          child: const Text(
-                            'Edit',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-
-                      const SizedBox(height: 12),
-
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xffef4444),
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(vertical: 14),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            elevation: 0,
-                          ),
-                          onPressed: () {},
-                          child: const Text(
-                            'Delete',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-
-                      const SizedBox(height: 10),
-                    ],
-                  ),
-                ),
-              ).show();
+          PopupMenuButton<String>(
+            surfaceTintColor: Color(0xff000000),
+            onSelected: (value) {
+              if (value == 'delete') {
+                onDelete();
+              }
             },
-            child: const Icon(Icons.more_vert, color: Color(0xFF94A3B8)),
+            itemBuilder: (context) => [
+              PopupMenuItem(value: 'edit', child: Text('Edit')),
+              PopupMenuItem(value: 'delete', child: const Text('Delete')),
+            ],
+            icon: const Icon(Icons.more_vert, color: Color(0xFF94A3B8)),
           ),
         ],
       ),
