@@ -47,7 +47,7 @@ class _HomepageState extends State<Homepage> {
   void showAddTaskDialog() {
     String title = '';
     String description = '';
-    String tag = 'study'; // default
+    String tag = 'study';
 
     showDialog(
       context: context,
@@ -83,7 +83,7 @@ class _HomepageState extends State<Homepage> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // close dialog
+                Navigator.of(context).pop();
               },
               child: const Text('Cancel'),
             ),
@@ -95,7 +95,7 @@ class _HomepageState extends State<Homepage> {
                       'tag': tag,
                       'title': title,
                       'description': description,
-                      'dateTime': DateTime.now(), // assign current date
+                      'dateTime': DateTime.now(),
                       'isDone': false,
                     });
                   });
