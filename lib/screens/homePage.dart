@@ -53,33 +53,63 @@ class _HomepageState extends State<Homepage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Add New Task'),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  decoration: const InputDecoration(labelText: 'Title'),
-                  onChanged: (value) => title = value,
+          backgroundColor: Color(0xffffffff),
+          titleTextStyle: TextStyle(color: Color(0xff000000)),
+          title: Text('Add New Task'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                decoration: InputDecoration(
+                  fillColor: Color(0xff000000),
+                  label: Text(
+                    'Task Title',
+                    style: TextStyle(color: Color(0xff000000)),
+                  ),
                 ),
-                TextField(
-                  decoration: const InputDecoration(labelText: 'Description'),
-                  onChanged: (value) => description = value,
-                ),
-                DropdownButtonFormField<String>(
-                  value: tag,
-                  decoration: const InputDecoration(labelText: 'Tag'),
-                  items: allTags
-                      .where((t) => t != 'All')
-                      .map((t) => DropdownMenuItem(value: t, child: Text(t)))
-                      .toList(),
-                  onChanged: (value) {
-                    if (value != null) tag = value;
-                  },
-                ),
-              ],
-            ),
+              ),
+              TextField(),
+              DropdownButtonFormField<String>(
+                value: tag,
+                items: allTags
+                    .where((t) => t != 'all')
+                    .map((t) => DropdownMenuItem(value: t, child: Text(t)))
+                    .toList(),
+                onChanged: (value) {
+                  if (value != null) tag = value;
+                },
+              ),
+            ],
           ),
+          // content: SingleChildScrollView(
+          //   child: Column(
+          //     mainAxisSize: MainAxisSize.min,
+          //     children: [
+          //       TextField(
+          //         decoration: const InputDecoration(
+          //           labelText: 'Title',
+          //           fillColor: Color(0xff000000),
+          //         ),
+          //         onChanged: (value) => title = value,
+          //       ),
+          //       TextField(
+          //         decoration: const InputDecoration(labelText: 'Description'),
+          //         onChanged: (value) => description = value,
+          //       ),
+          //       DropdownButtonFormField<String>(
+          //         value: tag,
+          //         decoration: const InputDecoration(labelText: 'Tag'),
+          //         items: allTags
+          //             .where((t) => t != 'All')
+          //             .map((t) => DropdownMenuItem(value: t, child: Text(t)))
+          //             .toList(),
+          //         onChanged: (value) {
+          //           if (value != null) tag = value;
+          //         },
+          //       ),
+          //     ],
+          //   ),
+          // ),
           actions: [
             TextButton(
               onPressed: () {
