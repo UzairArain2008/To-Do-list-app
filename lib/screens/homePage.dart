@@ -116,8 +116,14 @@ class _HomepageState extends State<Homepage> {
                 ),
                 SizedBox(height: 16),
                 DropdownButtonFormField<String>(
+                  dropdownColor: Color(0xffffffff),
                   decoration: InputDecoration(
                     labelText: 'Tag',
+                    prefixIcon: Icon(Icons.category, color: Color(0xff000000)),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 14,
+                    ),
                     labelStyle: TextStyle(color: Colors.black),
                     enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(width: 2, color: Colors.grey),
@@ -141,7 +147,8 @@ class _HomepageState extends State<Homepage> {
                       'Select Date',
                       style: TextStyle(color: Colors.black),
                     ),
-                    enabledBorder: UnderlineInputBorder(
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
                       borderSide: BorderSide(color: Colors.grey, width: 2),
                     ),
                     focusedBorder: OutlineInputBorder(
@@ -155,6 +162,18 @@ class _HomepageState extends State<Homepage> {
                       initialDate: selectedDate ?? DateTime.now(),
                       firstDate: DateTime(2000),
                       lastDate: DateTime(2100),
+                      builder: (context, child) {
+                        return Theme(
+                          data: Theme.of(context).copyWith(
+                            colorScheme: ColorScheme.dark(
+                              primary: Color(0xffffffff),
+                              onPrimary: Colors.black,
+                              onSurface: Colors.white,
+                            ),
+                          ),
+                          child: child!,
+                        );
+                      },
                     );
                     if (pickedDate != null) {
                       setState(() {
@@ -177,7 +196,8 @@ class _HomepageState extends State<Homepage> {
                       'Select Time',
                       style: TextStyle(color: Colors.black),
                     ),
-                    enabledBorder: UnderlineInputBorder(
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
                       borderSide: BorderSide(color: Colors.grey, width: 2),
                     ),
                     focusedBorder: OutlineInputBorder(
@@ -186,13 +206,76 @@ class _HomepageState extends State<Homepage> {
                     ),
                   ),
                   onTap: () async {
-                    TimeOfDay? pickedTime = await showTimePicker(
+                    final TimeOfDay? picked = await showTimePicker(
                       context: context,
-                      initialTime: selectedTime ?? TimeOfDay.now(),
+                      initialTime: TimeOfDay.now(),
+                      builder: (context, child) {
+                        return MediaQuery(
+                          data: MediaQuery.of(context).copyWith(
+                            alwaysUse24HourFormat: false, // 12-hour format
+                          ),
+                          child: Theme(
+                            data: Theme.of(context).copyWith(
+                              colorScheme: ColorScheme.light(
+                                primary: Colors
+                                    .black, // selected text + dial highlight
+                                onPrimary:
+                                    Colors.black, // text on selected container
+                                surface: Colors.white, // dial background
+                                onSurface:
+                                    Colors.white, // text on unselected dial
+                              ),
+                              timePickerTheme: TimePickerThemeData(
+                                dialBackgroundColor:
+                                    Colors.black, // dial background
+                                dialHandColor: Colors.white, // hand color
+                                hourMinuteTextColor:
+                                    MaterialStateColor.resolveWith((states) {
+                                      if (states.contains(
+                                        MaterialState.selected,
+                                      )) {
+                                        return Colors
+                                            .white; // selected hour/min text
+                                      }
+                                      return Colors
+                                          .black; // unselected hour/min text
+                                    }),
+                                hourMinuteShape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  side: BorderSide(
+                                    color: Colors.black,
+                                  ), // selected container border
+                                ),
+                                dayPeriodColor: MaterialStateColor.resolveWith((
+                                  states,
+                                ) {
+                                  if (states.contains(MaterialState.selected)) {
+                                    return Colors.black; // selected AM/PM bg
+                                  }
+                                  return Colors.white; // unselected AM/PM bg
+                                }),
+                                dayPeriodTextColor:
+                                    MaterialStateColor.resolveWith((states) {
+                                      if (states.contains(
+                                        MaterialState.selected,
+                                      )) {
+                                        return Colors
+                                            .white; // selected AM/PM text
+                                      }
+                                      return Colors
+                                          .black; // unselected AM/PM text
+                                    }),
+                              ),
+                            ),
+                            child: child!,
+                          ),
+                        );
+                      },
                     );
-                    if (pickedTime != null) {
+
+                    if (picked != null) {
                       setState(() {
-                        selectedTime = pickedTime;
+                        selectedTime = picked;
                       });
                     }
                   },
@@ -203,15 +286,18 @@ class _HomepageState extends State<Homepage> {
                   ),
                 ),
                 SizedBox(height: 24),
-                // Actions
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     TextButton(
+                      style: ButtonStyle(elevation: WidgetStatePropertyAll(0)),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: const Text('Cancel'),
+                      child: const Text(
+                        'Cancel',
+                        style: TextStyle(color: Color(0xff000000)),
+                      ),
                     ),
                     SizedBox(width: 8),
                     ElevatedButton(
@@ -238,6 +324,13 @@ class _HomepageState extends State<Homepage> {
                           Navigator.of(context).pop();
                         }
                       },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xff000000),
+                        foregroundColor: Color(0xffffffff),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
                       child: const Text('Save Task'),
                     ),
                   ],
