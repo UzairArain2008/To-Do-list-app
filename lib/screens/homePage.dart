@@ -211,59 +211,49 @@ class _HomepageState extends State<Homepage> {
                       initialTime: TimeOfDay.now(),
                       builder: (context, child) {
                         return MediaQuery(
-                          data: MediaQuery.of(context).copyWith(
-                            alwaysUse24HourFormat: false, // 12-hour format
-                          ),
+                          data: MediaQuery.of(
+                            context,
+                          ).copyWith(alwaysUse24HourFormat: false),
                           child: Theme(
                             data: Theme.of(context).copyWith(
                               colorScheme: ColorScheme.light(
-                                primary: Colors
-                                    .black, // selected text + dial highlight
-                                onPrimary:
-                                    Colors.black, // text on selected container
-                                surface: Colors.white, // dial background
-                                onSurface:
-                                    Colors.white, // text on unselected dial
+                                primary: Colors.black,
+                                onPrimary: Colors.black,
+                                surface: Colors.white,
+                                onSurface: Colors.white,
                               ),
                               timePickerTheme: TimePickerThemeData(
-                                dialBackgroundColor:
-                                    Colors.black, // dial background
-                                dialHandColor: Colors.white, // hand color
+                                dialBackgroundColor: Colors.black,
+                                dialHandColor: Colors.white,
                                 hourMinuteTextColor:
                                     MaterialStateColor.resolveWith((states) {
                                       if (states.contains(
                                         MaterialState.selected,
                                       )) {
-                                        return Colors
-                                            .white; // selected hour/min text
+                                        return Colors.white;
                                       }
-                                      return Colors
-                                          .black; // unselected hour/min text
+                                      return Colors.black;
                                     }),
                                 hourMinuteShape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
-                                  side: BorderSide(
-                                    color: Colors.black,
-                                  ), // selected container border
+                                  side: BorderSide(color: Colors.black),
                                 ),
                                 dayPeriodColor: MaterialStateColor.resolveWith((
                                   states,
                                 ) {
                                   if (states.contains(MaterialState.selected)) {
-                                    return Colors.black; // selected AM/PM bg
+                                    return Colors.black;
                                   }
-                                  return Colors.white; // unselected AM/PM bg
+                                  return Colors.white;
                                 }),
                                 dayPeriodTextColor:
                                     MaterialStateColor.resolveWith((states) {
                                       if (states.contains(
                                         MaterialState.selected,
                                       )) {
-                                        return Colors
-                                            .white; // selected AM/PM text
+                                        return Colors.white;
                                       }
-                                      return Colors
-                                          .black; // unselected AM/PM text
+                                      return Colors.black;
                                     }),
                               ),
                             ),
